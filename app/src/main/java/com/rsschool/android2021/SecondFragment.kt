@@ -8,7 +8,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 
-class SecondFragment : Fragment() {
+class SecondFragment : Fragment(), OnBackPressedListener {
 
     private var backButton: Button? = null
     private var result: TextView? = null
@@ -53,5 +53,9 @@ class SecondFragment : Fragment() {
 
         private const val MIN_VALUE_KEY = "MIN_VALUE"
         private const val MAX_VALUE_KEY = "MAX_VALUE"
+    }
+
+    override fun doBack() {
+        (activity as MainActivity).openFirstFragment(result?.text?.toString()!!.toInt())
     }
 }

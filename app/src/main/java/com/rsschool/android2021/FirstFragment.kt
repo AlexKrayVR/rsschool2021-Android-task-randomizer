@@ -1,6 +1,7 @@
 package com.rsschool.android2021
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import java.math.BigDecimal
 
 class FirstFragment : Fragment() {
 
@@ -16,6 +18,7 @@ class FirstFragment : Fragment() {
     private var previousResult: TextView? = null
     private var minValue: EditText? = null
     private var maxValue: EditText? = null
+    private var toast: Toast? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,28 +39,46 @@ class FirstFragment : Fragment() {
         previousResult?.text = "Previous result: ${result.toString()}"
 
         generateButton?.setOnClickListener {
-            val max = maxValue?.text?.trim().toString()
             val min = minValue?.text?.trim().toString()
+            val max = maxValue?.text?.trim().toString()
+            Log.d("app","min: $min\nmax: $max")
             when {
                 min.isEmpty() -> {
-                    Toast.makeText(context, "write min value!", Toast.LENGTH_SHORT).show()
+                    makeToast("the minimum value field cannot be empty!")
                 }
                 max.isEmpty() -> {
-                    Toast.makeText(context, "write max value!", Toast.LENGTH_SHORT).show()
+                    makeToast("the maximum value field cannot be empty!")
                 }
-                min > max -> {
-                    Toast.makeText(
-                        context,
-                        "min value can not be more than max value!",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                BigDecimal(min) < BigDecimal(0) -> {
+                    makeToast("minimum value can not be less than 0!")
+                }
+                BigDecimal(max) < BigDecimal(0) -> {
+                    makeToast("maximum value can not be less than 0!")
+                }
 
+                BigDecimal(min) > BigDecimal(2147483647) -> {
+                    makeToast("the minimum value cannot be greater than the largest possible Int32 value (2147483647)!")
+                }
+
+                BigDecimal(max) > BigDecimal(2147483647) -> {
+                    makeToast("the maximum value cannot be greater than the largest possible Int32 value (2147483647)!")
+                }
+
+                BigDecimal(min) > BigDecimal(max) -> {
+                    makeToast("min value can not be more than max value!")
                 }
                 else -> {
                     (activity as MainActivity).openSecondFragment(min.toInt(), max.toInt())
                 }
             }
         }
+    }
+
+
+    private fun makeToast(message: String) {
+        toast?.cancel()
+        toast = Toast.makeText(context, message, Toast.LENGTH_LONG)
+        toast?.show()
     }
 
     companion object {

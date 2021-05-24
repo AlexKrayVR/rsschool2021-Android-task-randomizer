@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity implements Randomizer {
 
     @Override
@@ -25,6 +27,20 @@ public class MainActivity extends AppCompatActivity implements Randomizer {
     public void openSecondFragment(int min, int max) {
         final Fragment secondFragment = SecondFragment.newInstance(min, max);
         final FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.container, secondFragment).commit();
+        transaction
+                .replace(R.id.container, secondFragment)
+                .commit();
+    }
+
+    @Override
+    public void onBackPressed() {
+        List<Fragment> fragmentList = getSupportFragmentManager().getFragments();
+        for (Fragment fragment : fragmentList) {
+            if (fragment instanceof OnBackPressedListener) {
+                ((OnBackPressedListener) fragment).doBack();
+                return;
+            }
+        }
+        finish();
     }
 }
