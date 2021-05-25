@@ -1,6 +1,6 @@
 package com.rsschool.android2021
 
-interface Randomizer {
+interface Communicator {
     fun openFirstFragment(number: Int)
     fun openSecondFragment(min: Int, max: Int)
 }

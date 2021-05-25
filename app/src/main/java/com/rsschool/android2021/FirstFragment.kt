@@ -1,5 +1,6 @@
 package com.rsschool.android2021
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -19,6 +20,8 @@ class FirstFragment : Fragment() {
     private var minValue: EditText? = null
     private var maxValue: EditText? = null
     private var toast: Toast? = null
+
+    private var communicator: Communicator? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,7 +44,7 @@ class FirstFragment : Fragment() {
         generateButton?.setOnClickListener {
             val min = minValue?.text?.trim().toString()
             val max = maxValue?.text?.trim().toString()
-            Log.d("app","min: $min\nmax: $max")
+            Log.d("app", "min: $min\nmax: $max")
             when {
                 min.isEmpty() -> {
                     makeToast("the minimum value field cannot be empty!")
@@ -68,7 +71,8 @@ class FirstFragment : Fragment() {
                     makeToast("min value can not be more than max value!")
                 }
                 else -> {
-                    (activity as MainActivity).openSecondFragment(min.toInt(), max.toInt())
+                    //(activity as MainActivity).openSecondFragment(min.toInt(), max.toInt())
+                    communicator?.openSecondFragment(min.toInt(), max.toInt())
                 }
             }
         }
@@ -92,5 +96,16 @@ class FirstFragment : Fragment() {
         }
 
         private const val PREVIOUS_RESULT_KEY = "PREVIOUS_RESULT"
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        communicator = activity as Communicator
+    }
+
+
+    override fun onDetach() {
+        super.onDetach()
+        communicator = null
     }
 }

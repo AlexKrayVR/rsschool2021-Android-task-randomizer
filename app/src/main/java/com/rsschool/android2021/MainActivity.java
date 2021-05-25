@@ -9,7 +9,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements Randomizer {
+public class MainActivity extends AppCompatActivity implements Communicator {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
